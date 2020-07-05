@@ -1,9 +1,14 @@
-import sys, fileinput
+import sys
 import select
 import argparse
 
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QListWidget, QListWidgetItem, QAbstractItemView, QPushButton
 from PyQt5.QtCore import Qt
+
+def flush(list: QListWidget) -> None:
+  for entry in [str(list.item(i).text()) for i in range(list.count()) if list.item(i).checkState() == Qt.Checked]:
+    print(entry)
+
 
 def main() -> None:
   if not select.select([sys.stdin,],[],[],0.0)[0]:
@@ -30,7 +35,7 @@ def main() -> None:
   # Populate and Display the List
   the_list = QListWidget()
   the_list.setDragDropMode(QAbstractItemView.InternalMove)
-  for item in fileinput.input():
+  for item in map(lambda x: x.replace('\n', ''), sys.stdin.readlines()):
     lol = QListWidgetItem()
     lol.setText(item)
     lol.setCheckState(Qt.Checked)
@@ -40,6 +45,7 @@ def main() -> None:
   # Also add a cheeky Confirm Button.
   the_button = QPushButton()
   the_button.setText("Confirm")
+  the_button.clicked.connect(lambda : flush(the_list) )
   main_layout.addWidget(the_button)
 
   # Execute the App
@@ -47,7 +53,3 @@ def main() -> None:
   app.exec()
 
 main()
-
-# TODO:
-# setModal would be nice
-# being centered at launch would be nice too
