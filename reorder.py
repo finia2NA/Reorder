@@ -8,6 +8,7 @@ from PyQt5.QtCore import Qt
 def flush(list: QListWidget) -> None:
   for entry in [str(list.item(i).text()) for i in range(list.count()) if list.item(i).checkState() == Qt.Checked]:
     print(entry)
+  sys.exit()
 
 
 def main() -> None:
@@ -45,7 +46,9 @@ def main() -> None:
   # Also add a cheeky Confirm Button.
   the_button = QPushButton()
   the_button.setText("Confirm")
-  the_button.clicked.connect(lambda : flush(the_list) )
+  the_button.clicked.connect(lambda :
+    flush(the_list)
+  )
   main_layout.addWidget(the_button)
 
   # Execute the App
