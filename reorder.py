@@ -4,12 +4,19 @@ import argparse
 
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QListWidget, QListWidgetItem, QAbstractItemView, QPushButton
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QGuiApplication, QCursor
+
 
 def flush(list: QListWidget) -> None:
   for entry in [str(list.item(i).text()) for i in range(list.count()) if list.item(i).checkState() == Qt.Checked]:
     print(entry)
   sys.exit()
 
+def center(window):
+    screen = QGuiApplication.screenAt(QCursor().pos())
+    fg = window.frameGeometry()
+    fg.moveCenter(screen.geometry().center())
+    window.move(fg.topLeft())
 
 def main() -> None:
   if not select.select([sys.stdin,],[],[],0.0)[0]:
@@ -46,12 +53,11 @@ def main() -> None:
   # Also add a cheeky Confirm Button.
   the_button = QPushButton()
   the_button.setText("Confirm")
-  the_button.clicked.connect(lambda :
-    flush(the_list)
-  )
+  the_button.clicked.connect(lambda :flush(the_list))
   main_layout.addWidget(the_button)
 
   # Execute the App
+  center(window)
   window.show()
   app.exec()
 
