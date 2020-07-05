@@ -3,6 +3,7 @@ import select
 import argparse
 
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QListWidget, QListWidgetItem, QAbstractItemView, QPushButton
+from PyQt5.QtCore import Qt
 
 def main() -> None:
   if not select.select([sys.stdin,],[],[],0.0)[0]:
@@ -32,7 +33,7 @@ def main() -> None:
   for item in fileinput.input():
     lol = QListWidgetItem()
     lol.setText(item)
-    lol.setCheckState(True)
+    lol.setCheckState(Qt.Checked)
     the_list.addItem(lol)
   main_layout.addWidget(the_list)
 
